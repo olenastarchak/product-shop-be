@@ -12,7 +12,13 @@ const getProducts = async () => {
       body: JSON.stringify(productList)
     }
   } catch (error) {
-    console.log(error);
+    return {
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
+      statusCode: 500,
+      body: JSON.stringify(error),
+    };
   }
 };
 

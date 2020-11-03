@@ -14,7 +14,13 @@ const getProductById = async (event) => {
       body: product ? JSON.stringify(product) : 'Product not found',
     };
   } catch (error) {
-    console.log(error);
+    return {
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      },
+      statusCode: 500,
+      body: JSON.stringify(error),
+    };
   }
 };
 
