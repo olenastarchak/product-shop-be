@@ -1,8 +1,9 @@
-import axios from 'axios'
+import { getProductList } from "../models/product";
 
-const getProducts = async () => {
+const getProducts = async (e) => {
   try {
-    const { data: productList } = await axios.get('https://my-json-bucket.s3-eu-west-1.amazonaws.com/productList.json');
+    console.log('Lambda function has been invoked with event: ', e);
+    const productList = await getProductList();
 
     return {
       headers: {
@@ -10,7 +11,7 @@ const getProducts = async () => {
       },
       statusCode: 200,
       body: JSON.stringify(productList)
-    }
+    };
   } catch (error) {
     return {
       headers: {
