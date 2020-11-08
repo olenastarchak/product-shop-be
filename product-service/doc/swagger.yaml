@@ -24,6 +24,58 @@ paths:
         - url: 'https://wdzdjsytsh.execute-api.eu-west-1.amazonaws.com/'
     servers:
       - url: 'https://wdzdjsytsh.execute-api.eu-west-1.amazonaws.com'
+    post:
+      requestBody:
+        description: example of body, image is optional
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                count:
+                  type: number
+                image:
+                  type: string
+                  format: url
+              required:
+                - title
+                - description
+                - price
+                - count
+            example:
+              title: new product 100500
+              description: new description 100500
+              price: 100
+              count: 1
+      responses:
+        '200':
+          description: New product has been created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product'
+              example:
+                id: 909af13e-cfa5-4025-9daf-402697dd7aa2
+                title: new product
+                description: new description
+                price: 100
+                count: 1
+                image: https://images.unsplash.com/photo-1551970634-747846a548cb?w=400
+        '400':
+          description: Bad request (missing some field or has incorrect field type)
+          content:
+            application/json:
+              schema:
+                type: string
+              example:
+                Bad request
   /dev/products/{productId}:
     get:
       description: Auto generated using Swagger Inspector

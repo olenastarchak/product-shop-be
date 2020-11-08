@@ -11,7 +11,6 @@ const postProduct = async (e) => {
   const isProductDataValid = typeof title === 'string'
       && typeof description === 'string'
       && typeof price === 'number'
-      && typeof image === 'string'
       && typeof count === 'number';
 
   if (!isProductDataValid) return {
