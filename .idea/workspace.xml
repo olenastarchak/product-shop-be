@@ -20,8 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b8b0a295-34ab-44d4-b731-8c76ce4ddc0b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/product-service/doc/swagger.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/doc/swagger.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/product-service/handlers/postProduct.js" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/handlers/postProduct.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/product-service/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/product-service/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +54,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1604244870971</updated>
-      <workItem from="1604244872084" duration="23420000" />
+      <workItem from="1604244872084" duration="23887000" />
     </task>
     <servers />
   </component>
