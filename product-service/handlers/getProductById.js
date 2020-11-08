@@ -15,12 +15,14 @@ const getProductById = async (e) => {
       body: product ? JSON.stringify(product) : 'Product not found',
     };
   } catch (error) {
+    console.error('Error during database request executing:', error);
+
     return {
       headers: {
         'Access-Control-Allow-Origin': '*'
       },
       statusCode: 500,
-      body: JSON.stringify(error),
+      body: 'Internal Server Error',
     };
   }
 };

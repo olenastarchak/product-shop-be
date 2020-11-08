@@ -9,7 +9,9 @@ jspm_packages
 .webpack
 
 # IDEs and editors
-.idea
+.idea/
 
 # System Files
 .DS_Store
+
+.env

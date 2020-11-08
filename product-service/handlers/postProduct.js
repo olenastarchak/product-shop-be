@@ -32,12 +32,14 @@ const postProduct = async (e) => {
       body: JSON.stringify(createdProduct),
     };
   } catch (error) {
+    console.error('Error during database request executing:', error);
+
     return {
       headers: {
         'Access-Control-Allow-Origin': '*',
       },
       statusCode: 500,
-      body: JSON.stringify(error),
+      body: 'Internal Server Error',
     };
   }
 };
