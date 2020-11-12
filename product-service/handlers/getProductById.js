@@ -1,10 +1,11 @@
-import axios from 'axios'
+import { getProduct } from "../models/product";
 
-const getProductById = async (event) => {
+const getProductById = async (e) => {
   try {
-    const { productId } = event.pathParameters;
-    const { data: productList } = await axios.get('https://my-json-bucket.s3-eu-west-1.amazonaws.com/productList.json');
-    const product = productList.find(product => product.id === productId);
+    console.log('Lambda function has been invoked with event: ', e);
+    const productId = e.pathParameters.productId;
+    console.log('productId: ', productId);
+    const product = await getProduct(productId);
 
     return {
       headers: {
@@ -14,12 +15,14 @@ const getProductById = async (event) => {
       body: product ? JSON.stringify(product) : 'Product not found',
     };
   } catch (error) {
+    console.error('Error during database request executing:', error);
+
     return {
       headers: {
         'Access-Control-Allow-Origin': '*'
       },
       statusCode: 500,
-      body: JSON.stringify(error),
+      body: 'Internal Server Error',
     };
   }
 };

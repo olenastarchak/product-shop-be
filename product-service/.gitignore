@@ -7,3 +7,11 @@ jspm_packages
 
 # Webpack directories
 .webpack
+
+# IDEs and editors
+.idea/
+
+# System Files
+.DS_Store
+
+.env

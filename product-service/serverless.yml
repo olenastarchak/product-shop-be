@@ -16,6 +16,13 @@ provider:
   region: eu-west-1
   profile: personal
 
+  environment:
+    PG_HOST: lesson4-instance.cei7owdrptoz.eu-west-1.rds.amazonaws.com
+    PG_PORT: 5432
+    PG_DATABASE: postgres
+    PG_USERNAME: postgres
+    PG_PASSWORD: # password
+
 functions:
   getProducts:
     handler: handler.getProducts
@@ -35,3 +42,10 @@ functions:
             parameters:
               paths:
                 productId: true
+  postProduct:
+    handler: handler.postProduct
+    events:
+      - http:
+          method: post
+          path: products
+          cors: true
