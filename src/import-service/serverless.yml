@@ -41,6 +41,13 @@ functions:
             parameters:
               querystrings:
                 name: true
+          authorizer:
+            name: importAuthorizer
+            arn:
+              Fn::ImportValue: basicAuthorizerArn
+            resultTtlInSeconds: 0
+            identitySource: method.request.header.Authorization
+            type: token
   importFileParser:
     handler: handler.importFileParser
     events:
@@ -50,3 +57,14 @@ functions:
           rules:
             - prefix: uploaded/
           existing: true
+resources:
+  Resources:
+    GatewayResponseDefault400:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
