@@ -13,6 +13,7 @@ provider:
 
   environment:
     S3_BUCKET: ${env:S3_BUCKET}
+    SQS_URL: ${cf:product-service-${self:provider.stage}.SQSQueueUrl}
 
   iamRoleStatements:
     - Effect: 'Allow'
@@ -23,6 +24,10 @@ provider:
       Action: 's3:*'
       Resource:
         - 'arn:aws:s3:::rs-school-uploader/*'
+    - Effect: 'Allow'
+      Action: 'sqs:*'
+      Resource:
+        - '${cf:product-service-${self:provider.stage}.SQSQueueArn}'
 
 functions:
   importProductsFile:

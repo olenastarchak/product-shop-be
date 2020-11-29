@@ -22,6 +22,57 @@ provider:
     PG_DATABASE: postgres
     PG_USERNAME: postgres
     PG_PASSWORD: # password
+    SNS_ARN:
+      Ref: SNSTopic
+
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action: 'sqs:*'
+      Resource:
+        - Fn::GetAtt: [ SQSQueue, Arn ]
+    - Effect: 'Allow'
+      Action: 'sns:*'
+      Resource:
+        Ref: SNSTopic
+
+resources:
+  Resources:
+    SQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue.fifo
+        FifoQueue: true
+        ContentBasedDeduplication: true
+        ReceiveMessageWaitTimeSeconds: 20
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: catalogItemsNotificationTopic
+    SNSSubscriptionSuccess:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: as.sns.success@gmail.com
+        Protocol: email
+        FilterPolicy:
+          isImportFailed: [ 'false' ]
+        TopicArn:
+          Ref: SNSTopic
+    SNSSubscriptionFail:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: as.sns.fail@gmail.com
+        Protocol: email
+        FilterPolicy:
+          isImportFailed: [ 'true' ]
+        TopicArn:
+          Ref: SNSTopic
+  Outputs:
+    SQSQueueUrl:
+      Value:
+        Ref: SQSQueue
+    SQSQueueArn:
+      Value:
+        Fn::GetAtt: [ SQSQueue, Arn ]
 
 functions:
   getProducts:
@@ -49,3 +100,12 @@ functions:
           method: post
           path: products
           cors: true
+  catalogBatchProcess:
+    handler: handler.catalogBatchProcess
+    events:
+      - sqs:
+          batchSize: 5
+          arn:
+            Fn::GetAtt:
+              - SQSQueue
+              - Arn

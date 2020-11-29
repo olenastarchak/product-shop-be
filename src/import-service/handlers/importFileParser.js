@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const csv = require('csv-parser');
-const { S3_BUCKET } = process.env;
+const { S3_BUCKET, SQS_URL } = process.env;
 
 const importFileParser = async (e) => {
   console.log('Lambda function has been invoked with event: ', e);
@@ -8,6 +8,7 @@ const importFileParser = async (e) => {
   try {
     const s3 = new AWS.S3({ region: 'eu-west-1' });
     const streams = [];
+    const sqs = new AWS.SQS()
 
     for (const record of e.Records) {
       const { key } = record.s3.object;
@@ -16,10 +17,26 @@ const importFileParser = async (e) => {
           Bucket: S3_BUCKET,
           Key: key,
         }).createReadStream();
+        console.log(`Parsing file ${key}`)
 
         s3Stream.pipe(csv())
-          .on('open', () => console.log(`Parsing file ${key}`))
-          .on('data', data => console.log('csv-parser data:', data))
+          .on('data', data => {
+            console.log('CSV data:', data)
+            if (data.price) data.price = Number(data.price)
+            if (data.count) data.count = Number(data.count)
+            sqs.sendMessage({
+              QueueUrl: SQS_URL,
+              MessageGroupId: key,
+              MessageBody: JSON.stringify(data)
+            }, (err, res) => {
+              console.log('SQS message payload: ', data)
+              if (err) {
+                console.log('Error ocurred during sending: ', err)
+              } else {
+                console.log('Message has been sent, SQS response: ', res)
+              }
+            })
+          })
           .on('error', error => {
             console.log('Error:', error);
             reject(error);
